@@ -30,13 +30,15 @@ namespace Chased
         Point position;
         Texture2D texture;
         String file = "test.png";
-        public GameObject(Point position)
+        public GameObject(Point position, String file)
         {
             this.position = position;
+            this.file = file;
         }
-        public GameObject(Int32 x, Int32 y)
+        public GameObject(Int32 x, Int32 y, String file)
         {
             this.position = new Point(x, y);
+            this.file = file;
         }
         public void loadDrawables(ContentManager content)
         {
