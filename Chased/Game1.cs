@@ -18,6 +18,10 @@ namespace Chased
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
+        Texture2D player;
+        Rectangle playerLoc;
+        double time;
+        int timer = 0;
 
         public Game1()
             : base()
@@ -35,7 +39,7 @@ namespace Chased
         protected override void Initialize()
         {
             // TODO: Add your initialization logic here
-
+            IsMouseVisible = false;
             base.Initialize();
         }
 
@@ -47,6 +51,7 @@ namespace Chased
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            Texture2D screen = Content.Load<Texture2D>("screen.png");
 
             // TODO: use this.Content to load your game content here
         }
