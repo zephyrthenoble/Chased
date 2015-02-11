@@ -18,8 +18,9 @@ namespace Chased
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        Texture2D player;
-        Rectangle playerLoc;
+        GameObject player;
+        //Texture2D player;
+        //Rectangle playerLoc;
         double time;
         int timer = 0;
 

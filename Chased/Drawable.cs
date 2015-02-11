@@ -7,7 +7,6 @@ namespace Chased
 {
     interface Drawable
     {
-        void loadDrawables(Microsoft.Xna.Framework.Content.ContentManager content);
         void draw(Microsoft.Xna.Framework.Graphics.SpriteBatch spritebatch);
     }
 }
