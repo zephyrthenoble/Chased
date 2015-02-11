@@ -15,29 +15,20 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace Chased
 {
-    class Point
-    {
-        Int32 x;
-        Int32 y;
-        public Point(Int32 x, Int32 y)
-        {
-            this.x = x;
-            this.y = y;
-        }
-    }
+
     class GameObject : Drawable
     {
-        Point position;
+        Vector2 position;
         Texture2D texture;
         String file = "test.png";
-        public GameObject(Point position, String file)
+        public GameObject(Vector2 position, String file)
         {
             this.position = position;
             this.file = file;
         }
         public GameObject(Int32 x, Int32 y, String file)
         {
-            this.position = new Point(x, y);
+            this.position = new Vector2(x, y);
             this.file = file;
         }
         public void loadDrawables(ContentManager content)
@@ -46,7 +37,7 @@ namespace Chased
         }
         public void draw(SpriteBatch spritebatch)
         {
-            spritebatch.Draw(texture);
+            spritebatch.Draw(texture, position);
         }
     }
 }
