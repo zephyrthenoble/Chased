@@ -52,7 +52,7 @@ namespace Chased
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
-            Texture2D screen = Content.Load<Texture2D>("screen.png");
+            //Texture2D screen = Content.Load<Texture2D>("screen.png");
 
             // TODO: use this.Content to load your game content here
         }
