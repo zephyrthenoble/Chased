@@ -9,9 +9,20 @@ namespace Chased
 {
     class Element : GameObject
     {
-        public void LoadContent(ContentManager content) { }
+        public enum type
+        {
+            hoop,
+            lava
+        }
+        public static Texture2D hoop;
+        public static Texture2D lava;
+        type myType;
+        public static void LoadContent(ContentManager content) { }
         public void draw(SpriteBatch spriteBatch) { }
-        public Element(Int32 x, Int32 y, Texture2D tex) 
-            : base(x, y, tex) { }
+        public Element(Int32 x, Int32 y, Texture2D tex, type t) 
+            : base(x, y, tex) 
+        {
+            myType = t;
+        }
     }
 }
