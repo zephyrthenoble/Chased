@@ -63,10 +63,10 @@ namespace Chased
             {
                 state = fallState.falling;
             }
-            Rectangle playerBottom = new Rectangle(bounds.X, bounds.Y + bounds.Height - 1, bounds.Width, 1);
+            
+            Rectangle playerBottom = new Rectangle(bounds.X, bounds.Bottom - (Int32)velocity.Y - 1, bounds.Width, (Int32)velocity.Y + 1);
             foreach (Platform p in game.platforms)
             {
-                //System.Diagnostics.Debug.WriteLine(playerBottom);
                 if (p.bounds.Intersects(playerBottom) )
                 {
                     this.bounds.Y = p.bounds.Y - this.bounds.Height;
