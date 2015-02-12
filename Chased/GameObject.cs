@@ -18,7 +18,12 @@ namespace Chased
     public class GameObject
     {
         public Rectangle bounds;
-
+        public Texture2D sprite;
+        public GameObject(Int32 x, Int32 y, Texture2D tex)
+        {
+            sprite = tex;
+            this.bounds = new Rectangle(x, y, sprite.Width, sprite.Height);
+        }
         public GameObject(Rectangle bounds)
         {
             this.bounds = bounds;

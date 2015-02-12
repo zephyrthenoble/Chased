@@ -17,12 +17,13 @@ namespace Chased
     /// </summary>
     public class Game1 : Game
     {
+        int count = 0;
         GraphicsDeviceManager graphics;
-         public SpriteBatch spriteBatch;
-         public Player player;
-         public List<Platform> platforms = new List<Platform>();
-         public List<Platform> removable = new List<Platform>();
-         public Random r = new Random(100);
+        public SpriteBatch spriteBatch;
+        public Player player;
+        public List<Platform> platforms = new List<Platform>();
+        public List<Platform> removable = new List<Platform>();
+        public Random r = new Random(200);
         //Texture2D player;
         //Rectangle playerLoc;
         //double time;
@@ -33,8 +34,8 @@ namespace Chased
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
-            graphics.PreferredBackBufferWidth = 800;  // set this value to the desired width of your window
-            graphics.PreferredBackBufferHeight = 800;   // set this value to the desired height of your window
+            graphics.PreferredBackBufferWidth = 1000;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 700;   // set this value to the desired height of your window
             graphics.ApplyChanges();
         }
 
@@ -94,6 +95,8 @@ namespace Chased
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            
+            
             GamePadState state = GamePad.GetState(PlayerIndex.One);
             KeyboardState keyboard = Keyboard.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
@@ -115,10 +118,20 @@ namespace Chased
                 platforms.Remove(p);
             }
             removable.Clear();
-            if(r.NextDouble() < .1)
+            count++;
+            if (count >= 15)
             {
-                Int32 y = 300 + (Int32)(r.NextDouble() * 400.0);
-                platforms.Add(new Platform(800, y));
+                count = 0;
+                
+                Int32 y = (Int32)(r.NextDouble() * graphics.PreferredBackBufferHeight);
+                if (r.NextDouble() < .5)
+                {
+                    platforms.Add(new Platform(graphics.PreferredBackBufferWidth, y));
+                }
+                else
+                {
+                    platforms.Add(new Platform(graphics.PreferredBackBufferWidth, y, Platform.hazard_platform));
+                }
             }
             base.Update(gameTime);
         }
@@ -132,12 +145,12 @@ namespace Chased
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-            spriteBatch.Begin();
-            player.draw(spriteBatch);
+            spriteBatch.Begin();   
             foreach (Platform p in platforms)
             {
                 p.draw(spriteBatch);
             }
+            player.draw(spriteBatch);
             spriteBatch.End();
             base.Draw(gameTime);
         }

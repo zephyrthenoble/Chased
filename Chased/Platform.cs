@@ -13,11 +13,14 @@ namespace Chased
         {
             public Vector2 velocity = new Vector2(0, 0);
             public Int32 counter = 0;
-            public static Texture2D sprite;
+            public static Texture2D normal_platform;
+            public static Texture2D hazard_platform;
             public static string filename = "platform";
+            public static string hazard_filename = "hazard_platform";
             public static void LoadContent(ContentManager content)
             {
-                sprite = content.Load<Texture2D>(filename);
+                normal_platform = content.Load<Texture2D>(filename);
+                hazard_platform = content.Load<Texture2D>(hazard_filename);
             }
             public void draw(SpriteBatch spritebatch)
             {
@@ -28,8 +31,20 @@ namespace Chased
                 bounds.Offset((Int32)velocity.X, (Int32)velocity.Y);
             }
             public Platform(Vector2 position)
-                : base(new Rectangle((int)position.X, (int)position.Y, sprite.Bounds.Width, sprite.Bounds.Height)) { velocity = new Vector2(-3, 0); }
+                : base(new Rectangle((int)position.X, (int)position.Y, normal_platform.Bounds.Width, normal_platform.Bounds.Height)) 
+            {
+                sprite = normal_platform;
+                velocity = new Vector2(-5, 0);
+            }
             public Platform(Int32 x, Int32 y)
-                : base(new Rectangle(x, y, sprite.Bounds.Width, sprite.Bounds.Height)) { velocity = new Vector2(-3, 0); }
+                : base(x, y, normal_platform) 
+            {
+                velocity = new Vector2(-5, 0); 
+            }
+            public Platform(Int32 x, Int32 y, Texture2D tex)
+                : base(x, y, tex)
+            {
+                velocity = new Vector2(-5, 0);
+            }
         }   
 }

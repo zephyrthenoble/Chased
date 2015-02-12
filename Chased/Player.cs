@@ -75,6 +75,11 @@ namespace Chased
                 }
             }
             bounds.Offset((Int32)velocity.X, (Int32)velocity.Y);
+
+            if (bounds.Y > 1000)
+            {
+                bounds.Y = 0;
+            }
             previousKeyboardState = k;
         }
         public Player(Vector2 position)
