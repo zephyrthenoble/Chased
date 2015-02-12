@@ -7,6 +7,7 @@ using Microsoft.Xna.Framework.Graphics;
 using Microsoft.Xna.Framework.Input;
 using Microsoft.Xna.Framework.Storage;
 using Microsoft.Xna.Framework.GamerServices;
+using System.Threading;
 #endregion
 
 namespace Chased
@@ -18,11 +19,12 @@ namespace Chased
     {
         GraphicsDeviceManager graphics;
         SpriteBatch spriteBatch;
-        GameObject player;
+        Player player;
+        //List<GameObject> platforms;
         //Texture2D player;
         //Rectangle playerLoc;
-        double time;
-        int timer = 0;
+        //double time;
+        //int timer = 0;
 
         public Game1()
             : base()
@@ -41,6 +43,8 @@ namespace Chased
         {
             // TODO: Add your initialization logic here
             IsMouseVisible = false;
+            Player.LoadContent(Content);
+            System.Diagnostics.Debug.WriteLine(GamePad.GetState(PlayerIndex.One).IsConnected);
             base.Initialize();
         }
 
@@ -54,6 +58,8 @@ namespace Chased
             spriteBatch = new SpriteBatch(GraphicsDevice);
             //Texture2D screen = Content.Load<Texture2D>("screen.png");
 
+            player = new Player(200, 200);
+            System.Diagnostics.Debug.Write("Done loading");
             // TODO: use this.Content to load your game content here
         }
 
@@ -73,11 +79,12 @@ namespace Chased
         /// <param name="gameTime">Provides a snapshot of timing values.</param>
         protected override void Update(GameTime gameTime)
         {
+            GamePadState state = GamePad.GetState(PlayerIndex.One);
+            KeyboardState keyboard = Keyboard.GetState();
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
-
             // TODO: Add your update logic here
-
+            player.update(state, keyboard, gameTime);
             base.Update(gameTime);
         }
 
@@ -90,7 +97,9 @@ namespace Chased
             GraphicsDevice.Clear(Color.CornflowerBlue);
 
             // TODO: Add your drawing code here
-
+            spriteBatch.Begin();
+            player.draw(spriteBatch);
+            spriteBatch.End();
             base.Draw(gameTime);
         }
     }

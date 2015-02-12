@@ -15,30 +15,18 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace Chased
 {
-    class GameObject : Drawable
+    class GameObject
     {
-        Vector2 position;
-        Texture2D sprite;
-        Rectangle bounds;
+        protected Rectangle bounds;
 
 
-        public GameObject(Vector2 position, Texture2D tex)
+        public GameObject(Rectangle bounds)
         {
-            this.position = position;
-            this.sprite = tex;
+            this.bounds = bounds;
         }
-        public GameObject(Int32 x, Int32 y, Texture2D tex)
+        public GameObject(Int32 x, Int32 y, Int32 width, Int32 height)
         {
-            this.position = new Vector2(x, y); 
-            this.sprite = tex;
-        }
-        public void draw(SpriteBatch spritebatch)
-        {
-            spritebatch.Draw(sprite, position);
-        }
-        private void updateBounds()
-        {
-            bounds = new Rectangle((int)position.X, (int)position.Y, sprite.Bounds.Width, sprite.Bounds.Height);
+            this.bounds = new Rectangle(x, y, width, height);
         }
     }
 }
