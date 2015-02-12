@@ -38,6 +38,7 @@
     <Compile Include="Drawable.cs" />
     <Compile Include="Game1.cs" />
     <Compile Include="GameObject.cs" />
+    <Compile Include="Platform.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -62,6 +63,9 @@
     <Content Include="C:\Program Files %28x86%29\MonoGame\v3.0\Assemblies\WindowsGL\SDL.dll">
       <Link>SDL.dll</Link>
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Content\platform.png">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Content\player.png">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>

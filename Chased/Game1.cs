@@ -18,9 +18,11 @@ namespace Chased
     public class Game1 : Game
     {
         GraphicsDeviceManager graphics;
-        SpriteBatch spriteBatch;
-        Player player;
-        //List<GameObject> platforms;
+         public SpriteBatch spriteBatch;
+         public Player player;
+         public List<Platform> platforms = new List<Platform>();
+         public List<Platform> removable = new List<Platform>();
+         public Random r = new Random(100);
         //Texture2D player;
         //Rectangle playerLoc;
         //double time;
@@ -31,6 +33,9 @@ namespace Chased
         {
             graphics = new GraphicsDeviceManager(this);
             Content.RootDirectory = "Content";
+            graphics.PreferredBackBufferWidth = 800;  // set this value to the desired width of your window
+            graphics.PreferredBackBufferHeight = 800;   // set this value to the desired height of your window
+            graphics.ApplyChanges();
         }
 
         /// <summary>
@@ -43,7 +48,7 @@ namespace Chased
         {
             // TODO: Add your initialization logic here
             IsMouseVisible = false;
-            Player.LoadContent(Content);
+
             System.Diagnostics.Debug.WriteLine(GamePad.GetState(PlayerIndex.One).IsConnected);
             base.Initialize();
         }
@@ -57,8 +62,18 @@ namespace Chased
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
             //Texture2D screen = Content.Load<Texture2D>("screen.png");
-
+            Player.LoadContent(Content);
+            Platform.LoadContent(Content);
             player = new Player(200, 200);
+            platforms.Add(new Platform(800, 400));
+            platforms.Add(new Platform(700, 400));
+            platforms.Add(new Platform(600, 400));
+            platforms.Add(new Platform(500, 400));
+            platforms.Add(new Platform(400, 400));
+            platforms.Add(new Platform(300, 400));
+            platforms.Add(new Platform(200, 400));
+            platforms.Add(new Platform(100, 400));
+            platforms.Add(new Platform(000, 400));
             System.Diagnostics.Debug.Write("Done loading");
             // TODO: use this.Content to load your game content here
         }
@@ -84,7 +99,27 @@ namespace Chased
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-            player.update(state, keyboard, gameTime);
+            player.update(state, keyboard, this, gameTime);
+            
+            foreach(Platform p in platforms)
+            {
+                p.update(state, keyboard, this, gameTime);
+                if(p.bounds.X < -150)
+                {
+                    removable.Add(p);
+                }
+            }
+            foreach(Platform p in removable)
+            { 
+                System.Diagnostics.Debug.WriteLine("removing " + p.ToString());
+                platforms.Remove(p);
+            }
+            removable.Clear();
+            if(r.NextDouble() < .1)
+            {
+                Int32 y = 300 + (Int32)(r.NextDouble() * 400.0);
+                platforms.Add(new Platform(800, y));
+            }
             base.Update(gameTime);
         }
 
@@ -99,6 +134,10 @@ namespace Chased
             // TODO: Add your drawing code here
             spriteBatch.Begin();
             player.draw(spriteBatch);
+            foreach (Platform p in platforms)
+            {
+                p.draw(spriteBatch);
+            }
             spriteBatch.End();
             base.Draw(gameTime);
         }

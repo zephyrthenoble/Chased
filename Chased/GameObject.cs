@@ -15,10 +15,9 @@ using Microsoft.Xna.Framework.GamerServices;
 
 namespace Chased
 {
-    class GameObject
+    public class GameObject
     {
-        protected Rectangle bounds;
-
+        public Rectangle bounds;
 
         public GameObject(Rectangle bounds)
         {

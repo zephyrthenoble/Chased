@@ -9,7 +9,7 @@ using System.Text;
 
 namespace Chased
 {
-    class Player : GameObject, Drawable
+    public class Player : GameObject, Drawable
     {
         public Vector2 velocity = new Vector2(0,0);
         public Int32 counter = 0;
@@ -26,35 +26,56 @@ namespace Chased
         public fallState state = fallState.grounded;
         public static void LoadContent(ContentManager content)
         {
-            sprite = content.Load<Texture2D>("player");
+            sprite = content.Load<Texture2D>(filename);
         }
         public void draw(SpriteBatch spritebatch)
         {
             spritebatch.Draw(sprite, bounds, Color.White);
+            
         }
-        public void update(GamePadState g, KeyboardState k, GameTime gameTime)
+        public void update(GamePadState g, KeyboardState k, Game1 game, GameTime gameTime)
         {
+            velocity.Y += 1;
             if(k.IsKeyDown(Keys.Space)) {
                 if(state == fallState.grounded)
                 {
-                    state = fallState.jumping;
+                    state = fallState.jumping;   
                     velocity.Y = -20;
                 }
                 if(state == fallState.jumping)
                 { 
                     counter += 1;
                 }
-                if (counter >= 50)
+                if (counter >= 20 && state == fallState.jumping)
                 {
+                    counter = 0;
                     state = fallState.falling;
+                    velocity.Y = 0;
                 }
             }
-            if(state != fallState.grounded)
+            else if( previousKeyboardState.IsKeyDown(Keys.Space) && state == fallState.jumping )
             {
-                //velocity.X += 1;
-                velocity.Y += 1;
+                counter = 0;
+                velocity.Y = 0;
+                state = fallState.falling;
+            }
+            if(state == fallState.grounded)
+            {
+                state = fallState.falling;
+            }
+            Rectangle playerBottom = new Rectangle(bounds.X, bounds.Y + bounds.Height - 1, bounds.Width, 1);
+            foreach (Platform p in game.platforms)
+            {
+                //System.Diagnostics.Debug.WriteLine(playerBottom);
+                if (p.bounds.Intersects(playerBottom) )
+                {
+                    this.bounds.Y = p.bounds.Y - this.bounds.Height;
+                    this.velocity = new Vector2(0, 0);
+                    this.state = fallState.grounded;
+                }
             }
             bounds.Offset((Int32)velocity.X, (Int32)velocity.Y);
+            previousKeyboardState = k;
         }
         public Player(Vector2 position)
             : base(new Rectangle((int)position.X, (int)position.Y, sprite.Bounds.Width, sprite.Bounds.Height)) { }
