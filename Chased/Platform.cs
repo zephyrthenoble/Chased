@@ -17,6 +17,7 @@ namespace Chased
             public static Texture2D hazard_platform;
             public static string filename = "platform";
             public static string hazard_filename = "hazard_platform";
+            public bool landedOn = false;
             public static void LoadContent(ContentManager content)
             {
                 normal_platform = content.Load<Texture2D>(filename);

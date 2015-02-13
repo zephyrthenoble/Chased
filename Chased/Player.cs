@@ -9,12 +9,12 @@ using System.Text;
 
 namespace Chased
 {
-    public class Player : GameObject, Drawable
+    public class Player : GameObject, Drawable, Updateable
     {
         public Vector2 velocity = new Vector2(0,0);
         public Int32 counter = 0;
-        public static Texture2D sprite;
         public static string filename = "player";
+        public static Texture2D player_tex;
         public GamePadState previousGamePadState;
         public KeyboardState previousKeyboardState;
         public enum fallState
@@ -26,12 +26,11 @@ namespace Chased
         public fallState state = fallState.grounded;
         public static void LoadContent(ContentManager content)
         {
-            sprite = content.Load<Texture2D>(filename);
+            player_tex = content.Load<Texture2D>(filename);
         }
         public void draw(SpriteBatch spritebatch)
         {
             spritebatch.Draw(sprite, bounds, Color.White);
-            
         }
         public void update(GamePadState g, KeyboardState k, Game1 game, GameTime gameTime)
         {
@@ -69,6 +68,7 @@ namespace Chased
             {
                 if (p.bounds.Intersects(playerBottom) )
                 {
+                    p.landedOn = true;
                     this.bounds.Y = p.bounds.Y - this.bounds.Height;
                     this.velocity = new Vector2(0, 0);
                     this.state = fallState.grounded;
@@ -83,8 +83,8 @@ namespace Chased
             previousKeyboardState = k;
         }
         public Player(Vector2 position)
-            : base(new Rectangle((int)position.X, (int)position.Y, sprite.Bounds.Width, sprite.Bounds.Height)) { }
+            : base(new Rectangle((int)position.X, (int)position.Y, player_tex.Bounds.Width, player_tex.Bounds.Height)) { sprite = player_tex; }
         public Player(Int32 x, Int32 y)
-            : base(new Rectangle(x, y, sprite.Bounds.Width, sprite.Bounds.Height)) { }
+            : base(new Rectangle(x, y, player_tex.Bounds.Width, player_tex.Bounds.Height)) { sprite = player_tex; }
     }
 }

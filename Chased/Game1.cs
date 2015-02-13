@@ -23,6 +23,7 @@ namespace Chased
         public Player player;
         public List<Platform> platforms = new List<Platform>();
         public List<Platform> removable = new List<Platform>();
+        public List<Hazard> hazards = new List<Hazard>();
         public Random r = new Random(200);
         //Texture2D player;
         //Rectangle playerLoc;
@@ -65,6 +66,10 @@ namespace Chased
             //Texture2D screen = Content.Load<Texture2D>("screen.png");
             Player.LoadContent(Content);
             Platform.LoadContent(Content);
+            Hazard.LoadContent(Content);
+
+
+
             player = new Player(200, 200);
             platforms.Add(new Platform(800, 400));
             platforms.Add(new Platform(700, 400));
@@ -75,6 +80,9 @@ namespace Chased
             platforms.Add(new Platform(200, 400));
             platforms.Add(new Platform(100, 400));
             platforms.Add(new Platform(000, 400));
+
+            hazards.Add(new Hazard(0, 800, this));
+
             System.Diagnostics.Debug.Write("Done loading");
             // TODO: use this.Content to load your game content here
         }
@@ -102,8 +110,10 @@ namespace Chased
             if (GamePad.GetState(PlayerIndex.One).Buttons.Back == ButtonState.Pressed || Keyboard.GetState().IsKeyDown(Keys.Escape))
                 Exit();
             // TODO: Add your update logic here
-            player.update(state, keyboard, this, gameTime);
-            
+            foreach (Hazard d in hazards)
+            {
+                d.update(state, keyboard, this, gameTime);
+            }
             foreach(Platform p in platforms)
             {
                 p.update(state, keyboard, this, gameTime);
@@ -124,15 +134,16 @@ namespace Chased
                 count = 0;
                 
                 Int32 y = (Int32)(r.NextDouble() * graphics.PreferredBackBufferHeight);
-                if (r.NextDouble() < .5)
-                {
+                //if (r.NextDouble() < .5)
+                //{
                     platforms.Add(new Platform(graphics.PreferredBackBufferWidth, y));
-                }
+                /*}
                 else
                 {
                     platforms.Add(new Platform(graphics.PreferredBackBufferWidth, y, Platform.hazard_platform));
-                }
+                }*/
             }
+            player.update(state, keyboard, this, gameTime);
             base.Update(gameTime);
         }
 
@@ -149,6 +160,10 @@ namespace Chased
             foreach (Platform p in platforms)
             {
                 p.draw(spriteBatch);
+            }
+            foreach (Hazard h in hazards)
+            {
+                h.draw(spriteBatch);
             }
             player.draw(spriteBatch);
             spriteBatch.End();
