@@ -13,10 +13,12 @@ namespace Chased
     {
         public Vector2 velocity = new Vector2(0,0);
         public Int32 counter = 0;
+        public const Int32 JUMP_HEIGHT = -20;
         public static string filename = "player";
         public static Texture2D player_tex;
         public GamePadState previousGamePadState;
         public KeyboardState previousKeyboardState;
+        public Rectangle playerBottom = new Rectangle(0, 0, 0, 0);
         public enum fallState
         {
             grounded,
@@ -31,25 +33,19 @@ namespace Chased
         public void draw(SpriteBatch spritebatch)
         {
             spritebatch.Draw(sprite, bounds, Color.White);
+            spritebatch.Draw(Platform.hazard_platform, playerBottom, Color.Black);
         }
-        public void update(GamePadState g, KeyboardState k, Game1 game, GameTime gameTime)
+        public void manageInput(GamePadState g, KeyboardState k)
         {
-            velocity.Y += 1;
             if(k.IsKeyDown(Keys.Space)) {
                 if(state == fallState.grounded)
                 {
                     state = fallState.jumping;   
-                    velocity.Y = -20;
+                    velocity.Y = JUMP_HEIGHT;
                 }
-                if(state == fallState.jumping)
+                if(state == fallState.jumping && velocity.Y >=0 )
                 { 
-                    counter += 1;
-                }
-                if (counter >= 20 && state == fallState.jumping)
-                {
-                    counter = 0;
                     state = fallState.falling;
-                    velocity.Y = 0;
                 }
             }
             else if( previousKeyboardState.IsKeyDown(Keys.Space) && state == fallState.jumping )
@@ -62,8 +58,14 @@ namespace Chased
             {
                 state = fallState.falling;
             }
+        }
+        public void update(GamePadState g, KeyboardState k, Game1 game, GameTime gameTime)
+        {
+            velocity.Y += 1;
+            manageInput(g, k);
             
-            Rectangle playerBottom = new Rectangle(bounds.X, bounds.Bottom - (Int32)velocity.Y - 1, bounds.Width, (Int32)velocity.Y + 1);
+            bounds.Offset((Int32)velocity.X, (Int32)velocity.Y);
+            playerBottom = new Rectangle(bounds.X, bounds.Bottom - (Int32)velocity.Y - 1, bounds.Width, (Int32)velocity.Y + 1);
             foreach (Platform p in game.platforms)
             {
                 if (p.bounds.Intersects(playerBottom) )
@@ -74,7 +76,7 @@ namespace Chased
                     this.state = fallState.grounded;
                 }
             }
-            bounds.Offset((Int32)velocity.X, (Int32)velocity.Y);
+            //bounds.Offset((Int32)velocity.X, (Int32)velocity.Y);
 
             if (bounds.Y > 1000)
             {

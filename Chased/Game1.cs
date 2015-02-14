@@ -144,6 +144,7 @@ namespace Chased
                 }*/
             }
             player.update(state, keyboard, this, gameTime);
+            //Thread.Sleep(100);
             base.Update(gameTime);
         }
 
