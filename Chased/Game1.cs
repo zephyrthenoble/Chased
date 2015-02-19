@@ -25,6 +25,7 @@ namespace Chased
         public List<Platform> removable = new List<Platform>();
         public List<Hazard> hazards = new List<Hazard>();
         public Random r = new Random(200);
+        public static SpriteFont font;
         //Texture2D player;
         //Rectangle playerLoc;
         //double time;
@@ -63,6 +64,7 @@ namespace Chased
         {
             // Create a new SpriteBatch, which can be used to draw textures.
             spriteBatch = new SpriteBatch(GraphicsDevice);
+            font = Content.Load<SpriteFont>("Fonts/Arial"); 
             //Texture2D screen = Content.Load<Texture2D>("screen.png");
             Player.LoadContent(Content);
             Platform.LoadContent(Content);
@@ -117,7 +119,7 @@ namespace Chased
             foreach(Platform p in platforms)
             {
                 p.update(state, keyboard, this, gameTime);
-                if(p.bounds.X < -150)
+                if(p.bounds.X < -600)
                 {
                     removable.Add(p);
                 }
@@ -129,19 +131,19 @@ namespace Chased
             }
             removable.Clear();
             count++;
-            if (count >= 15)
+            if (count >= 30)
             {
                 count = 0;
                 
-                Int32 y = (Int32)(r.NextDouble() * graphics.PreferredBackBufferHeight);
-                //if (r.NextDouble() < .5)
-                //{
+                Int32 y = (Int32)(r.NextDouble() * graphics.PreferredBackBufferHeight/50.0) * 50;
+                if (r.NextDouble() > 0.1)
+                {
                     platforms.Add(new Platform(graphics.PreferredBackBufferWidth, y));
-                /*}
+                }
                 else
                 {
-                    platforms.Add(new Platform(graphics.PreferredBackBufferWidth, y, Platform.hazard_platform));
-                }*/
+                    platforms.Add(new Platform(graphics.PreferredBackBufferWidth, y, Platform.large_platform));
+                }
             }
             player.update(state, keyboard, this, gameTime);
             //Thread.Sleep(100);

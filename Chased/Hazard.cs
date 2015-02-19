@@ -14,12 +14,11 @@ namespace Chased
         public List<Platform> platforms = new List<Platform>();
         public List<Element> hazards = new List<Element>();
         public List<Element> objectives = new List<Element>();
-        public static SpriteFont font;
         public bool completed = false;
-        public static void LoadContent(ContentManager content) { font = content.Load<SpriteFont>("Arial"); }
+        public static void LoadContent(ContentManager content) { }
         public void draw(SpriteBatch spriteBatch) 
         {
-            spriteBatch.DrawString(font, "Hazard complete: " + completed, new Vector2(50, 50), Color.White);
+            spriteBatch.DrawString(Game1.font, "Hazard complete: " + completed, new Vector2(50, 50), Color.White);
         }
         public void update(GamePadState g, KeyboardState k, Game1 game, GameTime gameTime)
         {

@@ -14,11 +14,12 @@ namespace Chased
         public Vector2 velocity = new Vector2(0,0);
         public Int32 counter = 0;
         public const Int32 JUMP_HEIGHT = -20;
-        public static string filename = "player";
+        public static string filename = "Images/player";
         public static Texture2D player_tex;
         public GamePadState previousGamePadState;
         public KeyboardState previousKeyboardState;
         public Rectangle playerBottom = new Rectangle(0, 0, 0, 0);
+        public Rectangle playerTop = new Rectangle(0, 0, 0, 0);
         public enum fallState
         {
             grounded,
@@ -34,6 +35,7 @@ namespace Chased
         {
             spritebatch.Draw(sprite, bounds, Color.White);
             spritebatch.Draw(Platform.hazard_platform, playerBottom, Color.Black);
+            spritebatch.Draw(Platform.hazard_platform, playerTop, Color.Black);
         }
         public void manageInput(GamePadState g, KeyboardState k)
         {
@@ -58,17 +60,20 @@ namespace Chased
             {
                 state = fallState.falling;
             }
+            previousKeyboardState = k;
         }
-        public void update(GamePadState g, KeyboardState k, Game1 game, GameTime gameTime)
+        protected void offset()
         {
-            velocity.Y += 1;
-            manageInput(g, k);
-            
             bounds.Offset((Int32)velocity.X, (Int32)velocity.Y);
             playerBottom = new Rectangle(bounds.X, bounds.Bottom - (Int32)velocity.Y - 1, bounds.Width, (Int32)velocity.Y + 1);
+            playerTop = new Rectangle(bounds.X, bounds.Y + (Int32)velocity.Y - 1, bounds.Width, -1*((Int32)velocity.Y + 1));
+        }
+        protected void manageIntersection(GameTime gameTime, Game1 game)
+        {
             foreach (Platform p in game.platforms)
             {
-                if (p.bounds.Intersects(playerBottom) )
+                Rectangle platform_top = new Rectangle(p.bounds.X, p.bounds.Y, p.bounds.Width, 4);
+                if (platform_top.Intersects(playerBottom) && state == fallState.falling)
                 {
                     p.landedOn = true;
                     this.bounds.Y = p.bounds.Y - this.bounds.Height;
@@ -76,13 +81,21 @@ namespace Chased
                     this.state = fallState.grounded;
                 }
             }
-            //bounds.Offset((Int32)velocity.X, (Int32)velocity.Y);
-
             if (bounds.Y > 1000)
             {
                 bounds.Y = 0;
             }
-            previousKeyboardState = k;
+            else if (bounds.Y < -50)
+            {
+                bounds.Y = 800;
+            }
+        }
+        public void update(GamePadState g, KeyboardState k, Game1 game, GameTime gameTime)
+        {
+            velocity.Y += 1;
+            manageInput(g, k);
+            offset();
+            manageIntersection(gameTime, game);
         }
         public Player(Vector2 position)
             : base(new Rectangle((int)position.X, (int)position.Y, player_tex.Bounds.Width, player_tex.Bounds.Height)) { sprite = player_tex; }
